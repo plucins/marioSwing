@@ -26,8 +26,7 @@ public class Dispatcher {
         List<Class<?>> interfacesImplementedByObject = ClassUtils.getAllInterfaces(o.getClass());
 
         for (Class<?> classtype : interfacesImplementedByObject) {
-            System.out.println("Rejestruje obiekt: " + o + " - implementuje interfejs " + classtype.getName());
-            List objects = map.get(classtype);
+             List objects = map.get(classtype);
             if (objects == null) {
                 objects = new ArrayList<>();
             }
@@ -37,13 +36,6 @@ public class Dispatcher {
     }
 
     public <T> List<T> getAllObjectsImplementingInterface(Class<T> clas) {
-        List<T> lista = (List<T>) map.get(clas);
-        System.out.println("Szukam obiektów implementującyc interface : " + clas.getName() + " znalezione obiekty: ");
-        for (T t : lista) {
-            System.out.println(" ----> " + t);
-        }
-        System.out.println();
-
         return (List<T>) map.get(clas);
     }
 
