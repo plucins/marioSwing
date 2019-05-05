@@ -9,14 +9,23 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameHero extends AbstractPaintable implements ICollisionListener, IJumpListener {
     private BufferedImage bufferedImage;
     private double verticalVelocity = 0.0;
     private final double GRAVITY = 0.01;
+    private int licznik = 1;
+    private Map<String, BufferedImage> imageMap = new HashMap<>();
+    private boolean isMoving = false;
+    private boolean movingLeft = false;
+
+
 
     public GameHero(int positionX, int positionY) {
         super(positionX, positionY);
+        loadHeroImages();
 
         try {
             bufferedImage = ImageIO.read(new File("images/final_mario.png"));
@@ -27,6 +36,42 @@ public class GameHero extends AbstractPaintable implements ICollisionListener, I
         Dispatcher.instance.registerObject(this);
     }
 
+
+    public void animateHero() {
+        if(isMoving) {
+            if(movingLeft) {
+                bufferedImage = imageMap.get("left_" + licznik);
+            }else {
+                bufferedImage = imageMap.get("right_" + licznik );
+            }
+        } else {
+            bufferedImage = imageMap.get("front");
+        }
+
+
+        if(licznik < 3) {
+            licznik++;
+        } else {
+            licznik = 1;
+        }
+    }
+
+    private void loadHeroImages() {
+
+        try {
+            imageMap.put("front", ImageIO.read(new File("images/image_front.png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for(int i = 1; i < 4 ; i++){
+            try {
+                imageMap.put("left_" +i, ImageIO.read(new File("images/image_left_"+i+".png")));
+                imageMap.put("right_" +i, ImageIO.read(new File("images/image_right_"+i+".png")));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 
     public void moveVertical(double timeDifference) {
@@ -39,6 +84,14 @@ public class GameHero extends AbstractPaintable implements ICollisionListener, I
     public void fall() {
         if (verticalVelocity >= 0.0)
             verticalVelocity = 1.0;
+    }
+
+    public void setMovingLeft(boolean movingLeft) {
+        this.movingLeft = movingLeft;
+    }
+
+    public void setMoving(boolean moving) {
+        isMoving = moving;
     }
 
     @Override

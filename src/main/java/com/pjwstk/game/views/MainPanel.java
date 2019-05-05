@@ -12,13 +12,12 @@ import com.pjwstk.game.models.Gate;
 import com.pjwstk.game.models.Score;
 import com.pjwstk.game.models.movement.MovementHorizontal;
 import com.pjwstk.game.models.movement.MovementVertical;
-import com.pjwstk.game.events.*;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainPanel extends JPanel implements IFinishGateReachedListener {
     private Dimension wymiar;
@@ -96,6 +95,7 @@ public class MainPanel extends JPanel implements IFinishGateReachedListener {
         double moveStep = (PIXELS_PER_SECOND * difference) / 1000.0;
 
         boolean haveSomethingUnder = false;
+        hero.animateHero();
 
         for (AbstractPaintable paintable : przeszkody) {
             if (hero.checkCollision(paintable)) {
@@ -175,6 +175,18 @@ public class MainPanel extends JPanel implements IFinishGateReachedListener {
     }
 
     public void horizontalMovement(MovementHorizontal direction) {
+        if(direction == MovementHorizontal.RIGHT ) {
+            hero.setMovingLeft(false);
+            hero.setMoving(true);
+
+        } else if ( direction == MovementHorizontal.LEFT){
+            hero.setMovingLeft(true);
+            hero.setMoving(true);
+        }
+        else {
+            hero.setMoving(false);
+        }
+
         horizontal = direction;
     }
 
